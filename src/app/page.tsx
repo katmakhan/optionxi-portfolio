@@ -83,7 +83,7 @@ const WORDPRESS_PROJECTS: WebProject[] = [
     tech: "WordPress + Elementor"
   },
   {
-    name: "Bytes Interior",
+    name: "Byts Interior",
     domain: "bytsinterior.com",
     image: "/assets/website/byts-interiors.png",
     weblink: "https://bytsinterior.com/",
