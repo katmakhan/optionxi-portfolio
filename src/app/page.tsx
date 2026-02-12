@@ -256,15 +256,18 @@ export default function Portfolio() {
     }
   }, [darkMode]);
 
-  const handleWhatsAppContact = (type: string, total?: number) => {
+  const handleWhatsAppContact = (type: string, total?: number, selectedItems?: string[]) => {
     let message = "";
     const phone = "919496672190"; // Replace with your actual WhatsApp number
     
     switch(type) {
       case 'wordpress':
-        message = total 
-          ? `Hi! I'm interested in the WordPress Web Development package. My total is ₹${total.toLocaleString()}. I'd like to discuss my requirements.`
-          : `Hi! I'm interested in the WordPress Web Development package. I'd like to discuss my requirements.`;
+        if (total && selectedItems && selectedItems.length > 0) {
+          const itemsList = selectedItems.map(item => `• ${item}`).join('\n');
+          message = `Hi! I'm interested in the WordPress Web Development package.\n\n*Selected options:*\n${itemsList}\n\n*Total: ₹${total.toLocaleString()}*\n\nI'd like to discuss my requirements.`;
+        } else {
+          message = `Hi! I'm interested in the WordPress Web Development package. I'd like to discuss my requirements.`;
+        }
         break;
       case 'android':
         message = `Hi! I'm interested in Android App Development (₹2,000/screen). I have a project in mind.`;
@@ -487,7 +490,7 @@ export default function Portfolio() {
 }
 
 // --- Component: Interactive WordPress Pricing ---
-function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, total?: number) => void, darkMode: boolean }) {
+function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, total?: number, selectedItems?: string[]) => void, darkMode: boolean }) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(['hosting', 'pages']);
 
   const pricingOptions: PricingOption[] = [
@@ -523,6 +526,14 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
       label: 'Professional Email',
       detail: 'Zoho Workspace (India)',
       price: 3000,
+      badge: 'Optional'
+    },
+    {
+      id: 'seo',
+      icon: <Mail size={16} />,
+      label: 'SEO and Analytics',
+      detail: 'Google Analytics',
+      price: 5000,
       badge: 'Optional'
     },
     {
@@ -656,7 +667,12 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
       </div>
 
       <button 
-        onClick={() => onContact('wordpress', totalPrice)}
+        onClick={() => {
+          const selectedLabels = pricingOptions
+            .filter(opt => selectedOptions.includes(opt.id))
+            .map(opt => `${opt.label} — ₹${opt.price.toLocaleString()}`);
+          onContact('wordpress', totalPrice, selectedLabels);
+        }}
         className="w-full mt-4 px-6 py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base"
       >
         <MessageCircle size={18} />
