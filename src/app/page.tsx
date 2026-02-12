@@ -113,6 +113,14 @@ const WORDPRESS_PROJECTS: WebProject[] = [
     weblink: "https://skepskew.com/",
     category: "Digital Marketing Website",
     tech: "WordPress + Elementor"
+  },
+  {
+    name: "Campfinder",
+    domain: "campfinder.in",
+    image: "/assets/website/campfinder.png",
+    weblink: "https://campfinder.in/",
+    category: "Travel Website",
+    tech: "WordPress + Elementor"
   }
 ];
 
@@ -215,7 +223,7 @@ const TECH_STACK = [
 
 // Client websites - Add your client sites here
 const CLIENT_SITES: ClientSite[] = [
-  { name: "Evince Display", url: "https://evincedisplays.co.uk" },
+  // { name: "Evince Display", url: "https://evincedisplays.co.uk" },
   { name: "Skepskew", url: "https://skepskew.com" },
   { name: "Dubai Docs", url: "https://dubaidocs.com/" },
   { name: "Aloe International", url: "https://aloeinternational.com" },
@@ -224,16 +232,21 @@ const CLIENT_SITES: ClientSite[] = [
   { name: "Paalana Hospital", url: "https://paalana.in" },
   { name: "Tanva Ayurveda", url: "https://tanvaayurveda.com" },
   { name: "KCYM Palakkad", url: "https://kcymdioceseofpalghat.in" },
-  { name: "Heerachal", url: "https://heeraachal.in" }
+  { name: "Heerachal", url: "https://heeraachal.in" },
+  { name: "Campfinder", url: "https://campfinder.in" },
+  { name: "Sinai Renewal Centre", url: "https://sinairenewalcentre.org/" },
+  { name: "Sanjo College", url: "https://sanjocollegeofnursing.org/" },
+  { name: "Deivadan", url: "https://deivadan.org/" },
+  { name: "Home for Aged", url: "https://homefortheaged.org/" }
 ];
 
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(false);
 
-  useEffect(() => {
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(isDark);
-  }, []);
+  // useEffect(() => {
+  //   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  //   setDarkMode(isDark);
+  // }, []);
 
   useEffect(() => {
     if (darkMode) {
@@ -245,7 +258,7 @@ export default function Portfolio() {
 
   const handleWhatsAppContact = (type: string, total?: number) => {
     let message = "";
-    const phone = "919876543210"; // Replace with your actual WhatsApp number
+    const phone = "919496672190"; // Replace with your actual WhatsApp number
     
     switch(type) {
       case 'wordpress':
