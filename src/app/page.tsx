@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import { 
   Moon, Sun, ExternalLink, Smartphone, Globe, Server, Mail, CreditCard, 
   Layout, Plus, Database, School, Factory, MessageCircle, Code, Layers,
   Github, Linkedin, Twitter, Download, Users, TrendingUp, Zap, PenTool,
-  CheckCircle2, Circle, Wrench, FileText, Award, Star
+  CheckCircle2, Circle, Wrench, FileText, Award, Star,
+  Instagram
 } from 'lucide-react';
 
 // --- Interfaces ---
 interface ProjectBase {
   name: string;
   image: string;
-  linkedin: string;
+  weblink: string;
   category: string;
   tech: string;
 }
@@ -58,29 +59,69 @@ interface ClientSite {
 
 const WORDPRESS_PROJECTS: WebProject[] = [
   {
-    name: "Elite Interiors",
-    domain: "eliteinteriors.com",
-    image: "/assets/wp-interior.png",
-    linkedin: "https://www.linkedin.com/in/your-profile",
+    name: "Circle Elevators",
+    domain: "circleelavators.com",
+    image: "/assets/website/circle-elevators.png",
+    weblink: "https://circleelevators.com/",
     category: "Corporate Website",
     tech: "WordPress + Elementor"
   },
   {
-    name: "Tasty Bites Blog",
-    domain: "tastybites.com",
-    image: "/assets/wp-food.png",
-    linkedin: "https://www.linkedin.com/in/your-profile",
-    category: "Food Blog",
-    tech: "WordPress + Custom Theme"
+    name: "Paalana",
+    domain: "paalana.in",
+    image: "/assets/website/paalana.png",
+    weblink: "https://paalana.in/",
+    category: "Hospital Website",
+    tech: "WordPress + Elementor"
+  },
+  {
+    name: "Tanva Ayurveda",
+    domain: "tanvaayurveda.com",
+    image: "/assets/website/tanva-ayurveda.png",
+    weblink: "https://tanvaayurveda.com/",
+    category: "Ayurvedic Website",
+    tech: "WordPress + Elementor"
+  },
+  {
+    name: "Bytes Interior",
+    domain: "bytsinterior.com",
+    image: "/assets/website/byts-interiors.png",
+    weblink: "https://bytsinterior.com/",
+    category: "Interior Design Website",
+    tech: "WordPress + Elementor"
+  },
+  {
+    name: "Jimoffset Printers",
+    domain: "jimoffsetprinters.in",
+    image: "/assets/website/jimoffset.png",
+    weblink: "https://jimoffsetprinters.in/",
+    category: "Printing Press Website",
+    tech: "WordPress + Elementor"
+  },
+  {
+    name: "Deluxe Bifolds",
+    domain: "deluxebifolds.co.uk",
+    image: "/assets/website/deluxe-bifolds.png",
+    weblink: "https://deluxebifolds.co.uk/",
+    category: "Bi Folds Website",
+    tech: "WordPress + Elementor"
+  },
+  {
+    name: "Skepskew",
+    domain: "skepskew.com",
+    image: "/assets/website/skepskew.png",
+    weblink: "https://skepskew.com/",
+    category: "Digital Marketing Website",
+    tech: "WordPress + Elementor"
   }
 ];
 
 const WEB_PROJECTS: WebProject[] = [
   {
-    name: "Oharipadanam",
-    domain: "oharipadanam.com",
-    image: "/assets/oharipadanam.png",
-    linkedin: "https://www.linkedin.com/in/your-profile",
+    name: "OptionXi Web",
+    domain: "app.optionxi.com",
+    image: "/assets/web-app/webapp-optionxi.png",
+    weblink: "https://app.optionxi.com",
     category: "Finance Platform",
     tech: "Next.js"
   }
@@ -89,19 +130,35 @@ const WEB_PROJECTS: WebProject[] = [
 const APP_PROJECTS: AppProject[] = [
   {
     name: "StockEx",
-    image: "/assets/stockex.png",
+    image: "/assets/flutter-app/stockex.png",
     installs: "50K+",
-    linkedin: "https://www.linkedin.com/in/your-profile",
+    weblink: "https://play.google.com/store/apps/details?id=com.btechtraders.btechtraders",
     category: "Stock Trading",
     tech: "Flutter + Firebase"
   },
   {
     name: "OptionXi",
-    image: "/assets/optionxi.png",
+    image: "/assets/flutter-app/optionxi.png",
     installs: "4K+",
-    linkedin: "https://www.linkedin.com/in/your-profile",
+    weblink: "https://play.google.com/store/apps/details?id=com.optionxi.app",
     category: "Options Analytics",
     tech: "Flutter + Supabase + Python"
+  },
+  {
+    name: "Benchmate",
+    image: "/assets/flutter-app/benchmateapp.png",
+    installs: "10K+",
+    weblink: "https://play.google.com/store/apps/details?id=com.studentscafe.benchmate",
+    category: "Education",
+    tech: "Flutter + FIrebase"
+  },
+   {
+    name: "KCYM App",
+    image: "/assets/flutter-app/kcymapp.png",
+    installs: "4K+",
+    weblink: "https://play.google.com/store/apps/details?id=com.kcym.kcym",
+    category: "Utility",
+    tech: "Flutter + FIrebase"
   }
 ];
 
@@ -110,13 +167,13 @@ const WEBAPP_PROJECTS: WebAppProject[] = [
     name: "OptionXi Dashboard",
     domain: "app.optionxi.com",
     image: "/assets/optionxi-web.png",
-    linkedin: "https://www.linkedin.com/in/your-profile",
+    weblink: "https://app.optionxi.com",
     category: "Analytics Platform",
     tech: "Next.js + Python Backend",
     screenshots: [
-      "/assets/optionxi-screen-1.png",
-      "/assets/optionxi-screen-2.png",
-      "/assets/optionxi-screen-3.png"
+      "/assets/web-app/webapp-optionxi-ss1.png",
+      "/assets/web-app/webapp-optionxi-ss2.png",
+      // "/assets/optionxi-screen-3.png"
     ]
   }
 ];
@@ -134,7 +191,7 @@ const ERP_SOLUTIONS: ERPProject[] = [
   {
     title: "Manufacturing ERP",
     icon: <Factory className="w-8 h-8 mb-4" />,
-    description: "Inventory, production, and supply chain tracking with real-time insights.",
+    description: "Inventory, production, and supply chain tracking with real-time insights and dashboard with notifications",
     features: ["Inventory Control", "Production Planning", "Supply Chain", "Quality Management"],
     priceStart: "3,999",
     pricePremium: "6,999",
@@ -158,13 +215,16 @@ const TECH_STACK = [
 
 // Client websites - Add your client sites here
 const CLIENT_SITES: ClientSite[] = [
-  { name: "Elite Interiors", url: "https://eliteinteriors.com" },
-  { name: "Tasty Bites", url: "https://tastybites.com" },
-  { name: "Oharipadanam", url: "https://oharipadanam.com" },
-  { name: "Google", url: "https://google.com" },
-  { name: "GitHub", url: "https://github.com" },
-  { name: "Netflix", url: "https://netflix.com" },
-  { name: "Amazon", url: "https://amazon.com" },
+  { name: "Evince Display", url: "https://evincedisplays.co.uk" },
+  { name: "Skepskew", url: "https://skepskew.com" },
+  { name: "Dubai Docs", url: "https://dubaidocs.com/" },
+  { name: "Aloe International", url: "https://aloeinternational.com" },
+  { name: "Circle Elevators", url: "https://circleelevators.com" },
+  { name: "Migstaffing", url: "https://migstaffing.com" },
+  { name: "Paalana Hospital", url: "https://paalana.in" },
+  { name: "Tanva Ayurveda", url: "https://tanvaayurveda.com" },
+  { name: "KCYM Palakkad", url: "https://kcymdioceseofpalghat.in" },
+  { name: "Heerachal", url: "https://heeraachal.in" }
 ];
 
 export default function Portfolio() {
@@ -225,11 +285,11 @@ export default function Portfolio() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
+              {/* <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
                 JV
-              </div>
+              </div> */}
               <h1 className="text-xl sm:text-2xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                DevStudio
+                Dev OptionXi
               </h1>
             </div>
             
@@ -432,7 +492,7 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
       icon: <Layout size={16} />,
       label: 'Web Design (8 Pages)',
       detail: 'Home, About, Services, etc.',
-      price: 6000,
+      price: 8000,
       required: true,
       badge: 'Required'
     },
@@ -448,7 +508,7 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
       id: 'email',
       icon: <Mail size={16} />,
       label: 'Professional Email',
-      detail: 'Zoho/Google Workspace',
+      detail: 'Zoho Workspace (India)',
       price: 3000,
       badge: 'Optional'
     },
@@ -499,7 +559,7 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
         </div>
         <div className="text-left sm:text-right">
           <p className="text-xs sm:text-sm text-gray-500">Starting at</p>
-          <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">₹11,000</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">₹13,000</p>
         </div>
       </div>
       
@@ -539,6 +599,7 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
                 <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">{option.detail}</p>
               </div>
             </div>
+            
             <div className="flex items-center gap-2 shrink-0">
               <span className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">
                 ₹{(option.price / 1000).toFixed(0)}k
@@ -551,6 +612,7 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
             </div>
           </button>
         ))}
+        
       </div>
 
       <div className="pt-4 border-t border-gray-200 dark:border-slate-800 space-y-3">
@@ -560,22 +622,24 @@ function WordPressPricing({ onContact, darkMode }: { onContact: (type: string, t
             ₹{totalPrice.toLocaleString()}
           </span>
         </div>
+
+        <div className="flex justify-between text-xs">
+          <span className="text-gray-700 dark:text-gray-300">+ Additional Pages</span>
+          <span className="font-semibold text-gray-900 dark:text-white">₹1,000/page</span>
+        </div>
         
         <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/10 rounded-xl">
           <div className="flex items-center gap-2">
             <Wrench className="w-4 h-4 text-green-600" />
             <div>
-              <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">AMC</p>
+              <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Hosting AMC</p>
               <p className="text-[10px] text-gray-600 dark:text-gray-400">Annual Maintenance</p>
             </div>
           </div>
           <span className="font-semibold text-green-600 text-sm">₹3,000/yr</span>
         </div>
 
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-700 dark:text-gray-300">+ Additional Pages</span>
-          <span className="font-semibold text-gray-900 dark:text-white">₹1,000/page</span>
-        </div>
+
       </div>
 
       <button 
@@ -749,8 +813,19 @@ function PortfolioSection() {
   );
 }
 
-// --- Component: Client Showcase with Favicon Fetching ---
+// --- Component: Client Showcase with Autoscroll & Fading Sides ---
+// Drop-in replacement. Requires: useEffect, useRef imported from 'react'
+// (already present in your portfolio file)
+
 function ClientShowcase({ sites }: { sites: ClientSite[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<number | null>(null);
+  const pausedRef = useRef(false);
+  const posRef = useRef(0);
+
+  // Duplicate list for seamless infinite loop
+  const duplicated = [...sites, ...sites];
+
   const getFaviconUrl = (url: string) => {
     try {
       const domain = new URL(url).hostname;
@@ -760,17 +835,64 @@ function ClientShowcase({ sites }: { sites: ClientSite[] }) {
     }
   };
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const speed = 0.45; // px per frame — tweak for faster/slower
+
+    const step = () => {
+      if (!pausedRef.current) {
+        posRef.current += speed;
+        // Snap back at exactly the halfway point (the duplicate boundary)
+        const half = track.scrollWidth / 2;
+        if (posRef.current >= half) posRef.current = 0;
+        track.style.transform = `translateX(-${posRef.current}px)`;
+      }
+      animRef.current = requestAnimationFrame(step);
+    };
+
+    animRef.current = requestAnimationFrame(step);
+    return () => {
+      if (animRef.current !== null) cancelAnimationFrame(animRef.current);
+    };
+  }, []);
+
   return (
-    <section className="py-12">
+    <section className="py-16 overflow-hidden">
+      {/* Header */}
       <div className="text-center mb-12">
-        <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Trusted By</h3>
-        <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg">Companies and brands we've worked with</p>
+        <p className="text-xs font-semibold tracking-widest uppercase text-blue-500 dark:text-blue-400 mb-3">
+          Our Clients
+        </p>
+        <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+          Trusted By
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg">
+          Companies and brands we've worked with
+        </p>
       </div>
 
+      {/* Scroll track + fade overlays */}
       <div className="relative">
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-6 pb-4 px-4" style={{ width: 'max-content' }}>
-            {sites.map((site, index) => {
+        {/* Left fade */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-28 z-10
+          bg-linear-to-r from-gray-50 to-transparent
+          dark:from-slate-950 dark:to-transparent" />
+        {/* Right fade */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-28 z-10
+          bg-linear-to-l from-gray-50 to-transparent
+          dark:from-slate-950 dark:to-transparent" />
+
+        <div className="overflow-hidden py-4">
+          <div
+            ref={trackRef}
+            className="flex gap-5 will-change-transform"
+            style={{ width: "max-content" }}
+            onMouseEnter={() => (pausedRef.current = true)}
+            onMouseLeave={() => (pausedRef.current = false)}
+          >
+            {duplicated.map((site, index) => {
               const faviconUrl = getFaviconUrl(site.url);
               return (
                 <a
@@ -778,30 +900,57 @@ function ClientShowcase({ sites }: { sites: ClientSite[] }) {
                   href={site.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-xl hover:scale-105 min-w-35"
+                  className="group flex flex-col items-center gap-3 px-6 py-5 rounded-2xl
+                    bg-white dark:bg-slate-900
+                    border border-gray-100 dark:border-slate-800
+                    hover:border-blue-400 dark:hover:border-blue-500
+                    hover:-translate-y-1 hover:shadow-xl
+                    transition-all duration-300 min-w-32.5"
+                  style={{ boxShadow: "0 2px 12px 0 rgba(0,0,0,0.06)" }}
                 >
-                  {faviconUrl ? (
-                    <div className="w-16 h-16 rounded-xl bg-gray-100 dark:bg-slate-800 p-3 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <img 
-                        src={faviconUrl} 
+                  {/* Icon container */}
+                  <div className="relative w-14 h-14 flex items-center justify-center">
+                    {/* Background pill that tints on hover */}
+                    <div className="absolute inset-0 rounded-xl
+                      bg-linear-to-br from-gray-50 to-gray-100
+                      dark:from-slate-800 dark:to-slate-700
+                      group-hover:from-blue-50 group-hover:to-indigo-50
+                      dark:group-hover:from-blue-950 dark:group-hover:to-indigo-950
+                      transition-all duration-300" />
+                    {faviconUrl ? (
+                      <img
+                        src={faviconUrl}
                         alt={site.name}
-                        className="w-full h-full object-contain"
+                        className="relative w-8 h-8 object-contain
+                          group-hover:scale-110 transition-transform duration-300"
                         onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-2xl font-bold text-blue-600 dark:text-blue-400">${site.name.charAt(0)}</div>`;
+                          const img = e.target as HTMLImageElement;
+                          img.style.display = "none";
+                          const wrap = img.parentElement;
+                          if (wrap) {
+                            const fb = document.createElement("span");
+                            fb.className =
+                              "relative text-xl font-bold text-blue-600 dark:text-blue-400";
+                            fb.textContent = site.name.charAt(0).toUpperCase();
+                            wrap.appendChild(fb);
                           }
                         }}
                       />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 rounded-xl bg-linear-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform">
-                      {site.name.charAt(0)}
-                    </div>
-                  )}
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white text-center group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    ) : (
+                      <span className="relative text-xl font-bold
+                        bg-linear-to-br from-blue-500 to-indigo-500
+                        bg-clip-text text-transparent
+                        group-hover:scale-110 transition-transform duration-300">
+                        {site.name.charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Site name */}
+                  <span className="text-xs font-semibold text-gray-600 dark:text-gray-400
+                    text-center leading-tight max-w-25
+                    group-hover:text-blue-600 dark:group-hover:text-blue-400
+                    transition-colors duration-300">
                     {site.name}
                   </span>
                 </a>
@@ -810,7 +959,6 @@ function ClientShowcase({ sites }: { sites: ClientSite[] }) {
           </div>
         </div>
       </div>
-
     </section>
   );
 }
@@ -819,7 +967,7 @@ function ClientShowcase({ sites }: { sites: ClientSite[] }) {
 function ProjectCard({ project }: { project: WebProject }) {
   return (
     <a 
-      href={project.linkedin} 
+      href={project.weblink} 
       target="_blank" 
       rel="noopener noreferrer"
       className="group block relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200 dark:border-slate-800"
@@ -836,7 +984,7 @@ function ProjectCard({ project }: { project: WebProject }) {
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
           <span className="text-white font-semibold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
-            View on LinkedIn <ExternalLink size={16} />
+            View the website <ExternalLink size={16} />
           </span>
         </div>
       </div>
@@ -859,7 +1007,7 @@ function ProjectCard({ project }: { project: WebProject }) {
 function AppCard({ app }: { app: AppProject }) {
   return (
     <a 
-      href={app.linkedin} 
+      href={app.weblink} 
       target="_blank" 
       rel="noopener noreferrer"
       className="group block relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200 dark:border-slate-800"
@@ -938,7 +1086,7 @@ function WebAppShowcase({ webapp }: { webapp: WebAppProject }) {
           </div>
 
           <a 
-            href={webapp.linkedin} 
+            href={webapp.weblink} 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-purple-600/30 w-fit"
@@ -1063,10 +1211,10 @@ function Footer({ onContact }: { onContact: (type: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
+              {/* <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">
                 JV
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">DevStudio</h3>
+              </div> */}
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Dev OptionXi</h3>
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Crafting digital experiences with modern technology. Full-stack development services for web and mobile.
@@ -1077,22 +1225,43 @@ function Footer({ onContact }: { onContact: (type: string) => void }) {
             <h4 className="font-bold mb-4 text-gray-900 dark:text-white">Creator</h4>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+                {/* <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
                   JV
-                </div>
+                </div> */}
+                <img
+                    src="/assets/jibin.jpeg"
+                    alt="Jibin"
+                    className="w-12 h-12 rounded-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = ""; // or a fallback URL
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white">Jibin Victor John</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Full-Stack Developer</p>
                 </div>
               </div>
             </div>
+            {/* <br/>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+                  NG
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">Nithin George</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">UI/UX Designer</p>
+                </div>
+              </div>
+            </div> */}
           </div>
 
           <div>
             <h4 className="font-bold mb-4 text-gray-900 dark:text-white">Connect</h4>
             <div className="flex flex-wrap gap-3 mb-4">
               <a 
-                href="https://github.com/jibinvictorjohn" 
+                href="https://github.com/katmakhan" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-xl transition-all text-gray-700 dark:text-white"
@@ -1100,7 +1269,7 @@ function Footer({ onContact }: { onContact: (type: string) => void }) {
                 <Github size={20} />
               </a>
               <a 
-                href="https://linkedin.com/in/jibinvictorjohn" 
+                href="https://linkedin.com/in/jibin-victor-john-73a330114" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-xl transition-all text-gray-700 dark:text-white"
@@ -1114,6 +1283,14 @@ function Footer({ onContact }: { onContact: (type: string) => void }) {
                 className="p-3 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-xl transition-all text-gray-700 dark:text-white"
               >
                 <Twitter size={20} />
+              </a>
+               <a 
+                href="https://instagram.com/hi_functioning_sociopath" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-xl transition-all text-gray-700 dark:text-white"
+              >
+                <Instagram size={20} />
               </a>
               <button
                 onClick={() => onContact('general')}
